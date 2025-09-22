@@ -1,4 +1,17 @@
+import { useState } from "react"
+import { initialGameState, makeMove } from "./tictacdope"
+
 function App() {
+  const [gameState, setGameState] = useState(initialGameState)
+
+  const handleClick = ({ row, column }: { row: number, column: number }) => {
+    console.log(gameState)
+    const newGameState = makeMove(gameState, row, column)
+    setGameState(newGameState)
+  }
+
+  const board = gameState.board
+
   return (
     <>
       <div className="m-10">
@@ -6,15 +19,15 @@ function App() {
           <h1 className="text-center text-white font-bold text-7xl">Tic-Tac-Dope</h1>
         </div>
         <div className='m-auto content-center grid grid-cols-3 grid-rows-3 gap-3'>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">X</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">O</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">X</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">O</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">X</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">O</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">X</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">O</div>
-            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center">X</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 0, column: 0})}>{board[0][0]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 0, column: 1})}>{board[0][1]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 0, column: 2})}>{board[0][2]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 1, column: 0})}>{board[1][0]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 1, column: 1})}>{board[1][1]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 1, column: 2})}>{board[1][2]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 2, column: 0})}>{board[2][0]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 2, column: 1})}>{board[2][1]}</div>
+            <div className="bg-green-500 p-8 text-7xl text-white font-bold text-center" onClick={() => handleClick({row: 2, column: 2})}>{board[2][2]}</div>
         </div>
       </div>
     </>
