@@ -5,7 +5,8 @@ type Cell = Player | null
 export interface GameState {
   board: Cell[][] | undefined[][],
   currentPlayer: Player | null,
-  winner: Player | null
+  winner: Player | null,
+  stalemate: boolean
 }
 
 export const initialGameState: GameState = {
@@ -15,7 +16,8 @@ export const initialGameState: GameState = {
     [null, null, null]
 ],
   currentPlayer: "X",
-  winner: null
+  winner: null,
+  stalemate: false
 }
 
 // Check if a player has won the game
@@ -51,6 +53,10 @@ export const isWinner = (board: Cell[][] | undefined[][], player: Player) => {
   return null
 }
 
+const isStalemate = (gameState: GameState) => {
+  return gameState.board.every(row => row.every(cell => cell === "X" || cell === "O"))
+}
+
 // When a user clicks on a square
 // The game state is updated, so that the cell 
 // makeMove(gameState, "X", )
@@ -58,14 +64,17 @@ export const makeMove = (gameState: GameState, row: number, column: number): Gam
   const gameStateCopy = {
     board: gameState.board,
     currentPlayer: gameState.currentPlayer,
-    winner: gameState.winner
+    winner: gameState.winner,
+    stalemate: gameState.stalemate
   }
   console.log(gameState.currentPlayer)
   gameStateCopy.board[row][column] = gameState.currentPlayer
   if (gameStateCopy.currentPlayer) {
     const winner = isWinner(gameStateCopy.board, gameStateCopy.currentPlayer)
     gameStateCopy.winner = winner
-  }
+  } 
+  
+  gameStateCopy.stalemate = isStalemate(gameState)
 
   if(gameStateCopy.currentPlayer === "X") {
     gameStateCopy.currentPlayer = "O"

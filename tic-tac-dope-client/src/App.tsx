@@ -21,7 +21,8 @@ function App() {
         [null, null, null]
       ],
       winner: null,
-      currentPlayer: "X"
+      currentPlayer: "X",
+      stalemate: false
     })
   }
 
@@ -33,6 +34,12 @@ function App() {
         <div className="m-11 mt-20 mb-20">
           <h1 className="text-center text-white font-bold text-7xl">Tic-Tac-Dope</h1>
         </div>
+        {gameState.stalemate &&
+          <div className="flex flex-col items-center">
+            <h1 className="text-center mb-10 font-bold text-5xl text-white">GAME OVER, IT'S A STALEMATE!</h1>
+            <button className="bg-green-800 mb-10 p-10 text-white font-bold" onClick={handleReset}>PLAY AGAIN</button>
+          </div>   
+        }
         {gameState.winner && 
           <div className="flex flex-col items-center">
             <h1 className="text-center mb-10 font-bold text-5xl text-white">GAME OVER {gameState.winner} WINS!!</h1>
