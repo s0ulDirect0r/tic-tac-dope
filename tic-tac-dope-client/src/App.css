@@ -1,9 +1,0 @@
-.game-grid {
-  display: grid;
-  grid-template-columns: 200px 200px 200px;
-}
-
-
-.game-grid div {
-  border: 2px solid green;
-}
