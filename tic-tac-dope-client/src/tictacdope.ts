@@ -1,6 +1,6 @@
 
-type Player = "X" | "O"
-type Cell = Player | null
+export type Player = "X" | "O"
+export type Cell = Player | null
 
 export interface GameState {
   board: Cell[][] | undefined[][],
