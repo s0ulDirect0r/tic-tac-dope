@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { initialGameState, makeMove, type GameState } from "./tictacdope"
+import { initialGameState, makeMove } from "./tictacdope"
 
 function App() {
   const [gameState, setGameState] = useState(initialGameState)
