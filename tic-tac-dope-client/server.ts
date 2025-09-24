@@ -17,6 +17,7 @@ app.post("/move/:id", (req, res) => {
   console.log(req.body)
   const movedGame = gamesList[Number(req.params.id)]
    = makeMove(req.body.gameState, req.body.row, req.body.column)
+   console.log(movedGame)
   res.json(movedGame)
 })
 
