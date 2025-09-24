@@ -67,7 +67,7 @@ function Game(props: GameProps) {
   }
 
   const Cell = (props: CellProps) => (
-    <div onClick={props.onClick} className="bg-green-500 max-h-6xl flex flex-col justify-center items-center rounded-md aspect-square p-2 sm:p-8 text-7xl sm:text-9xl text-white font-bold">
+    <div onClick={props.onClick} className="bg-green-500 flex flex-col justify-center items-center rounded-md aspect-square p-2 sm:p-8 text-7xl sm:text-9xl text-white font-bold">
       <p>{props.children}</p>
     </div>
   )
@@ -87,7 +87,7 @@ function Game(props: GameProps) {
             <ReturnButton />
           </div>   
         }
-        <div className='content-center grid grid-cols-3 grid-rows-3 gap-3 sm:max-w-3xl'>
+        <div className='content-center grid grid-cols-3 grid-rows-3 gap-3 max-w-sm sm:max-w-3xl'>
           {gameState.board.map((row, rowIndex) => row.map((cell, cellIndex) => <Cell key={`${rowIndex} ${cellIndex}`} onClick={() => handleClick({ row: rowIndex, column: cellIndex })}>{cell}</Cell>))}
         </div>
         <div className="m-11 flex flex-col items-center gap-4">
