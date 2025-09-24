@@ -1,38 +1,68 @@
-import { useState } from "react"
-import { initialGameState, makeMove } from "./tictacdope"
+import { type GameState } from "../tictacdope"
+import { QueryClient, QueryClientProvider, useMutation, useQuery } from "@tanstack/react-query"
+import axios from 'axios'
 
+const queryClient = new QueryClient()
+interface moveData {
+  gameState: GameState;
+  row: number;
+  column: number;
+}
 
 function App() {
-  const [gameState, setGameState] = useState(initialGameState)
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Game />
+    </QueryClientProvider>
+  )
+}
 
-  const handleClick = ({ row, column }: { row: number, column: number }) => {
+function Game() {
+  const query = useQuery({
+    queryKey: ["gameState"],
+    queryFn: () => axios.get("/game").then((res) => res.data)
+  })
+
+  const moveMutation = useMutation({
+    mutationFn: (moveData: moveData) => axios.post("/move", moveData).then(res => res.data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
+  })
+
+  const resetMutation = useMutation({
+    mutationFn: (gameOver: boolean) => axios.post("/reset", gameOver).then(res => res.data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
+  })
+
+  if (query.isLoading) return <div>Loading...</div>
+  if (query.error) return <div>Error loading game</div>
+  if (!query.data) return <div>No game data</div>
+
+  const gameState = query.data as GameState;
+
+  const handleClick = async ({ row, column }: { row: number, column: number }) => {
     if(gameState.winner) {
         return true
     }
-    const newGameState = makeMove(gameState, row, column)
-    setGameState(newGameState)
+    const moveData = {
+      gameState,
+      row,
+      column
+    }
+    console.log('mutating!')
+    return moveMutation.mutate(moveData)
   }
 
   const handleReset = () => {
-    setGameState({
-      board: [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-      ],
-      winner: null,
-      currentPlayer: "X",
-      stalemate: false
-    })
+    return resetMutation.mutate(true)
   }
 
 
   const ResetButton = () => (
-    <button className="bg-green-800 mb-10 p-10 text-white font-bold" onClick={handleReset}>PLAY AGAIN</button>
+    <button onClick={handleReset} className="bg-green-800 mb-10 p-10 text-white font-bold">PLAY AGAIN</button>
   )
 
   interface CellProps extends React.PropsWithChildren {
-    onClick: () => true | undefined
+    onClick: () => Promise<true | void>
   }
 
   const Cell = (props: CellProps) => (
