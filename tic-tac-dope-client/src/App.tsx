@@ -18,6 +18,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <h1 className="text-center text-white mt-12 font-bold text-7xl">Tic-Tac-Dope</h1>
       {selectedGame ? <Game id={selectedGame} returnClick={handleReturnToSelectClick} /> : <GameSelect onClick={handleSelectGameClick} />}
     </QueryClientProvider>
   )
