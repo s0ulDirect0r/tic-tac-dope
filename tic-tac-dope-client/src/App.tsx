@@ -20,6 +20,17 @@ const GameSelect = (props: GameSelectProps) => {
     queryFn: () => axios.get(`/games`).then((res) => res.data)
   })
 
+  const createGameMutation = useMutation({
+    mutationFn: () => axios.post('/create').then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gamesList'] })
+    }
+  })
+
+  const handleCreateGameClick = () => {
+    return createGameMutation.mutate()
+  }
+
   if (query.isLoading) return <div>Loading...</div>
   if (query.error) return <div>Error loading games</div>
   if (!query.data) return <div>No game data</div>
@@ -29,6 +40,9 @@ const GameSelect = (props: GameSelectProps) => {
 
   return (
     <div className="flex flex-col m-8 justify-around gap-4">
+      <div>
+        <button onClick={handleCreateGameClick} className="bg-green-500 text-white border-green-500">Create Game</button>
+      </div>
       {gamesList.map(game => {
           console.log(game)
           return <button className="max-w-2xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.id}</button>

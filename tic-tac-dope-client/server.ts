@@ -34,27 +34,12 @@ app.post("/create", (req, res) => {
     stalemate: false
   })
   console.log(gamesList)
-  res.json(gamesList[nextId])
+  res.json(gamesList)
 })
 
 app.get("/games", (_, res) => {
   res.json(gamesList)
 })
-
-// this is gonna have to go
-// app.post("/reset", (req, res) => {
-//   gameState = {
-//     board: [
-//       [null, null, null], 
-//       [null, null, null], 
-//       [null, null, null]
-//     ],
-//     currentPlayer: "X",
-//     winner: null,
-//     stalemate: false
-//   }
-//   res.json(gameState)
-// })
 
 ViteExpress.listen(app, 3000, () => console.log("Server is listening..."))
 
