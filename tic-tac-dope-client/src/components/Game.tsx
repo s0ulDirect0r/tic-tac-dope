@@ -73,10 +73,6 @@ function Game(props: GameProps) {
   return (
     <>
       <div className="m-10">
-        <div className="m-11 mt-20 mb-20 flex flex-col items-center gap-4">
-          <h1 className="text-center text-white font-bold text-7xl">Tic-Tac-Dope</h1>
-          {(!gameState.winner && !gameState.stalemate) && <ReturnToGameSelectButton />}
-        </div>
         {gameState.stalemate &&
           <div className="flex flex-col items-center">
             <h1 className="text-center mb-10 font-bold text-5xl text-white">GAME OVER, IT'S A STALEMATE!</h1>
@@ -91,6 +87,9 @@ function Game(props: GameProps) {
         }
         <div className='m-auto content-center grid grid-cols-3 grid-rows-3 gap-3'>
           {gameState.board.map((row, rowIndex) => row.map((cell, cellIndex) => <Cell key={`${rowIndex} ${cellIndex}`} onClick={() => handleClick({ row: rowIndex, column: cellIndex })}>{cell}</Cell>))}
+        </div>
+        <div className="m-11 flex flex-col items-center gap-4">
+          {(!gameState.winner && !gameState.stalemate) && <ReturnToGameSelectButton />}
         </div>
       </div>
     </>
