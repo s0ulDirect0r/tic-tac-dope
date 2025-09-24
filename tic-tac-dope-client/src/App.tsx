@@ -8,7 +8,7 @@ const queryClient = new QueryClient()
 function App() {
   const [selectedGame, setSelectedGame] = useState<string | null>(null)
  
-  const handleGameClick = (id: string) => {
+  const handleSelectGameClick = (id: string) => {
     setSelectedGame(id)
   }
 
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {selectedGame ? <Game id={selectedGame} returnClick={handleReturnToSelectClick} /> : <GameSelect onClick={handleGameClick} />}
+      {selectedGame ? <Game id={selectedGame} returnClick={handleReturnToSelectClick} /> : <GameSelect onClick={handleSelectGameClick} />}
     </QueryClientProvider>
   )
 }

@@ -8,16 +8,13 @@ app.use(express.json())
 const gamesList: GameState[] = []
 
 app.get("/game/:id", (req, res) => {
-  console.log("retrieving game")
   const retrievedGame = gamesList[Number(req.params.id)]
   res.json(retrievedGame)
 })
 
 app.post("/move/:id", (req, res) => {
-  console.log(req.body)
   const movedGame = gamesList[Number(req.params.id)]
    = makeMove(req.body.gameState, req.body.row, req.body.column)
-   console.log(movedGame)
   res.json(movedGame)
 })
 
@@ -34,7 +31,7 @@ app.post("/create", (req, res) => {
     winner: null,
     stalemate: false
   })
-  console.log(gamesList)
+
   res.json(gamesList)
 })
 

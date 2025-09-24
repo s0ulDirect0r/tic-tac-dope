@@ -21,20 +21,15 @@ export const initialGameState = {
   stalemate: false
 }
 
-// Check if a player has won the game
 export const isWinner = (board: Cell[][] | undefined[][], player: Player) => {
-  // is there a smarter way than preprogramming conditions?
-  // let's just do it dumb first
-  // X Win States
   if(!player) {
     return null
   }
-  // check the rows
+
   if (board[0].every(cell => cell === player) || board[1].every(cell => cell === player) || board[2].every(cell => cell === player)) {
     return player
   }
 
-  // consolidate columns
   const columnOne = [board[0][0], board[1][0], board[2][0]]
   const columnTwo = [board[0][1], board[1][1], board[2][1]]
   const columnThree = [board[0][2], board[1][2], board[2][2]]
@@ -43,10 +38,9 @@ export const isWinner = (board: Cell[][] | undefined[][], player: Player) => {
     return player
   }
 
-  // check diaganols
   const diagonalOne = [board[0][0], board[1][1], board[2][2]]
   const diagonalTwo = [board[2][0], board[1][1], board[0][2]]
-  // O Win State
+  
   if(diagonalOne.every(cell => cell === player) || diagonalTwo.every(cell => cell === player)) {
     return player
   }
@@ -58,9 +52,6 @@ const isStalemate = (gameState: GameState) => {
   return gameState.board.every(row => row.every(cell => cell === "X" || cell === "O"))
 }
 
-// When a user clicks on a square
-// The game state is updated, so that the cell 
-// makeMove(gameState, "X", )
 export const makeMove = (gameState: GameState, row: number, column: number): GameState => {
   const gameStateCopy = {
     id: gameState.id,
