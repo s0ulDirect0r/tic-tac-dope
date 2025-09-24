@@ -67,8 +67,11 @@ export const makeMove = (gameState: GameState, row: number, column: number): Gam
     winner: gameState.winner,
     stalemate: gameState.stalemate
   }
-  console.log(gameState.currentPlayer)
-  gameStateCopy.board[row][column] = gameState.currentPlayer
+
+  if(!gameStateCopy.board[row][column]) {
+    gameStateCopy.board[row][column] = gameState.currentPlayer
+  }
+
   if (gameStateCopy.currentPlayer) {
     const winner = isWinner(gameStateCopy.board, gameStateCopy.currentPlayer)
     gameStateCopy.winner = winner
