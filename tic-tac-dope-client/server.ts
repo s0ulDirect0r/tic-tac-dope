@@ -13,7 +13,7 @@ export interface GameState {
   stalemate: boolean
 }
 
-export const initialGameState: GameState = {
+export const gameState: GameState = {
   board: [
     [null, null, null], 
     [null, null, null], 
@@ -25,7 +25,8 @@ export const initialGameState: GameState = {
 }
 
 app.get("/game", (_, res) => {
-  res.json(initialGameState)
+  console.log("retrieving game")
+  res.json(gameState)
 })
 
 app.post("/move", () => {
