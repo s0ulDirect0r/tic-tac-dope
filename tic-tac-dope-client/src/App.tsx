@@ -114,6 +114,10 @@ function Game(props: GameProps) {
     <button onClick={handleReturn} className="bg-green-800 mb-10 p-10 text-white font-bold">PLAY AGAIN</button>
   )
 
+  const ReturnToGameSelectButton = () => (
+    <button onClick={handleReturn} className="rounded-md bg-green-800 max-w-xl mb-4 p-4 text-white font-bold">return to game select</button>
+  )
+
   interface CellProps extends React.PropsWithChildren {
     onClick: () => Promise<true | void>
   }
@@ -125,8 +129,9 @@ function Game(props: GameProps) {
   return (
     <>
       <div className="m-10">
-        <div className="m-11 mt-20 mb-20">
+        <div className="m-11 mt-20 mb-20 flex flex-col items-center gap-4">
           <h1 className="text-center text-white font-bold text-7xl">Tic-Tac-Dope</h1>
+          <ReturnToGameSelectButton />
         </div>
         {gameState.stalemate &&
           <div className="flex flex-col items-center">
