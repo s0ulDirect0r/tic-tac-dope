@@ -1,44 +1,29 @@
 import express from "express"
 import ViteExpress from "vite-express"
-import { makeMove } from './tictacdope'
+import { makeMove, type GameState } from './tictacdope'
 
 const app = express()
 app.use(express.json())
 
-export type Player = "X" | "O"
-export type Cell = Player | null
+const gamesList: GameState[] = []
 
-export interface GameState {
-  board: Cell[][] | undefined[][],
-  currentPlayer: Player | null,
-  winner: Player | null,
-  stalemate: boolean
-}
-
-let gameState: GameState = {
-  board: [
-    [null, null, null], 
-    [null, null, null], 
-    [null, null, null]
-],
-  currentPlayer: "X",
-  winner: null,
-  stalemate: false
-}
-
-app.get("/game", (_, res) => {
+app.get("/game/:id", (req, res) => {
   console.log("retrieving game")
-  res.json(gameState)
+  const retrievedGame = gamesList[Number(req.params.id)]
+  res.json(retrievedGame)
 })
 
-app.post("/move", (req, res) => {
+app.post("/move/:id", (req, res) => {
   console.log(req.body)
-  gameState = makeMove(req.body.gameState, req.body.row, req.body.column)
-  res.json(gameState)
+  const movedGame = gamesList[Number(req.params.id)]
+   = makeMove(req.body.gameState, req.body.row, req.body.column)
+  res.json(movedGame)
 })
 
-app.post("/reset", (req, res) => {
-  gameState = {
+app.post("/create", (req, res) => {
+  const nextId = gamesList.length
+  gamesList.push({
+    id: `${nextId}`,
     board: [
       [null, null, null], 
       [null, null, null], 
@@ -47,8 +32,13 @@ app.post("/reset", (req, res) => {
     currentPlayer: "X",
     winner: null,
     stalemate: false
-  }
-  res.json(gameState)
+  })
+  console.log(gamesList)
+  res.json(gamesList)
+})
+
+app.get("/games", (_, res) => {
+  res.json(gamesList)
 })
 
 ViteExpress.listen(app, 3000, () => console.log("Server is listening..."))
