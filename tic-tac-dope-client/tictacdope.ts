@@ -3,13 +3,14 @@ export type Player = "X" | "O"
 export type Cell = Player | null
 
 export interface GameState {
+  id: string;
   board: Cell[][] | undefined[][],
   currentPlayer: Player | null,
   winner: Player | null,
   stalemate: boolean
 }
 
-export const initialGameState: GameState = {
+export const initialGameState = {
   board: [
     [null, null, null], 
     [null, null, null], 
@@ -62,6 +63,7 @@ const isStalemate = (gameState: GameState) => {
 // makeMove(gameState, "X", )
 export const makeMove = (gameState: GameState, row: number, column: number): GameState => {
   const gameStateCopy = {
+    id: gameState.id,
     board: gameState.board,
     currentPlayer: gameState.currentPlayer,
     winner: gameState.winner,
@@ -75,11 +77,14 @@ export const makeMove = (gameState: GameState, row: number, column: number): Gam
   if (gameStateCopy.currentPlayer) {
     const winner = isWinner(gameStateCopy.board, gameStateCopy.currentPlayer)
     gameStateCopy.winner = winner
+    console.log("do you think there's a winner?")
+    if(winner) return gameStateCopy
   } 
   
   gameStateCopy.stalemate = isStalemate(gameState)
-
+  console.log('passed stalemate check')
   if(gameStateCopy.currentPlayer === "X") {
+    console.log('getting here')
     gameStateCopy.currentPlayer = "O"
   } else if(gameStateCopy.currentPlayer === "O") {
     gameStateCopy.currentPlayer = "X"
