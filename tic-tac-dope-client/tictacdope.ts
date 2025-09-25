@@ -1,4 +1,4 @@
-
+import { gamesTable } from "./db/schema"
 export type Player = "X" | "O"
 export type Cell = Player | ""
 
@@ -10,15 +10,16 @@ export interface GameState {
   stalemate: boolean
 }
 
-export const initialGameState = {
-  board: [
-    ["", "", ""], 
-    ["", "", ""], 
-    ["", "", ""]
-],
-  currentPlayer: "X",
-  winner: null,
-  stalemate: false
+export const initialGameState: typeof gamesTable.$inferInsert = {
+    id: crypto.randomUUID(),
+    board: [
+      ["", "", ""], 
+      ["", "", ""], 
+      ["", "", ""]
+    ],
+    currentPlayer: "X",
+    winner: null,
+    stalemate: false
 }
 
 export const isWinner = (board: Cell[][] | undefined[][], player: Player) => {
