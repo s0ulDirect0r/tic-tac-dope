@@ -11,6 +11,7 @@ import { createServer } from "node:http"
 
 dotenv.config()
 const app = express()
+app.use(express.json())
 const server = createServer(app)
 const io = new Server(server, {
   cors: {
@@ -31,8 +32,11 @@ app.get("/game/:id", async (req, res) => {
   res.json(retrievedGame[0])
 })
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
   console.log('a user connected')
+  socket.on('move', (message) => {
+    console.log('move: ', message)
+  })
 })
 
 app.post("/move/:id", async (req, res) => {
@@ -44,6 +48,7 @@ app.post("/move/:id", async (req, res) => {
     stalemate: movedGame.stalemate
   })
   .where(eq(gamesTable.id, req.params.id))
+  io.emit('move', updatedGame[0])
   res.json(updatedGame[0])
 })
 
