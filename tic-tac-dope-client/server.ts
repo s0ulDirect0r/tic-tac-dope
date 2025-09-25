@@ -19,7 +19,7 @@ app.use(express.json())
 app.get("/game/:id", async (req, res) => {
   const { id }= req.params
   const retrievedGame = await db.select().from(gamesTable).where(eq(gamesTable.id, id))
-  res.json(retrievedGame)
+  res.json(retrievedGame[0])
 })
 
 // app.post("/move/:id", (req, res) => {
