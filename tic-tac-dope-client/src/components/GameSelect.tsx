@@ -18,6 +18,9 @@ const GameSelect = (props: GameSelectProps) => {
     mutationFn: () => axios.post('/create').then(res => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['gamesList'] })
+    },
+    onError: (error) => {
+      console.log(error)
     }
   })
 
