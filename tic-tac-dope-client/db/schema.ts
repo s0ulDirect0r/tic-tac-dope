@@ -12,6 +12,6 @@ export const gamesTable = pgTable("games", {
   id: uuid().primaryKey(),
   board: text('board').array().array().notNull().default([[], [], []]),
   currentPlayer: varchar({ length: 255 }).notNull(),
-  winner: boolean(),
+  winner: varchar({ length: 255 }),
   stalemate: boolean()
 })

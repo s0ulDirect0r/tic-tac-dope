@@ -3,7 +3,7 @@ import ViteExpress from "vite-express"
 import dotenv from 'dotenv'
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from 'postgres'
-import { initialGameState, makeMove, type GameState } from './tictacdope'
+import { initialGameState, makeMove } from './tictacdope'
 import { gamesTable } from "./db/schema"
 import { eq } from "drizzle-orm"
 
@@ -22,11 +22,17 @@ app.get("/game/:id", async (req, res) => {
   res.json(retrievedGame[0])
 })
 
-// app.post("/move/:id", (req, res) => {
-//   const movedGame = gamesList[Number(req.params.id)]
-//    = makeMove(req.body.gameState, req.body.row, req.body.column)
-//   res.json(movedGame)
-// })
+app.post("/move/:id", async (req, res) => {
+  const movedGame = makeMove(req.body.gameState, req.body.row, req.body.column)
+  const updatedGame = await db.update(gamesTable).set({
+    board: movedGame.board,
+    currentPlayer: movedGame.currentPlayer,
+    winner: movedGame.winner,
+    stalemate: movedGame.stalemate
+  })
+  .where(eq(gamesTable.id, req.params.id))
+  res.json(updatedGame[0])
+})
 
 app.post("/create", async (req, res) => {
   const returnedGames = await db.insert(gamesTable).values(initialGameState).returning()
