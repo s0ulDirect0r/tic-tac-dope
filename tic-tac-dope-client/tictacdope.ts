@@ -1,20 +1,20 @@
 
 export type Player = "X" | "O"
-export type Cell = Player | null
+export type Cell = Player | ""
 
 export interface GameState {
   id: string;
-  board: Cell[][] | undefined[][],
-  currentPlayer: Player | null,
+  board: Cell[][],
+  currentPlayer: Player,
   winner: Player | null,
   stalemate: boolean
 }
 
 export const initialGameState = {
   board: [
-    [null, null, null], 
-    [null, null, null], 
-    [null, null, null]
+    ["", "", ""], 
+    ["", "", ""], 
+    ["", "", ""]
 ],
   currentPlayer: "X",
   winner: null,

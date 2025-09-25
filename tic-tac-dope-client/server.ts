@@ -4,12 +4,47 @@ import dotenv from 'dotenv'
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from 'postgres'
 import { makeMove, type GameState } from './tictacdope'
+import { gamesTable } from "./db/schema"
+import { eq } from "drizzle-orm"
 
 dotenv.config()
 const app = express()
-const connectionString = process.env.DATABSE_URL!
+const connectionString = process.env.DATABASE_URL!
+
 export const client = postgres(connectionString, { prepare: false })
 const db = drizzle(client)
+
+
+async function main() {
+  const game: typeof gamesTable.$inferInsert = {
+    id: crypto.randomUUID(),
+    board: [
+      ["", "", ""], 
+      ["", "", ""], 
+      ["", "", ""]
+    ],
+    currentPlayer: "X",
+    winner: null,
+    stalemate: false
+  }
+
+  const insertResponse = await db.insert(gamesTable).values(game).returning();
+  const { id } = insertResponse[0]
+  console.log('new game created: ', insertResponse)
+
+  const games = await db.select().from(gamesTable);
+  console.log('Getting all games from the dataabse: ', games)
+
+  await db
+    .update(gamesTable)
+    .set({
+      winner: true
+    })
+    .where(eq(gamesTable.id, id))
+
+  await db.delete(gamesTable).where(eq(gamesTable.id, id))
+  console.log('Game deleted')
+}
 
 app.use(express.json())
 
@@ -27,13 +62,14 @@ app.post("/move/:id", (req, res) => {
 })
 
 app.post("/create", (req, res) => {
-  const nextId = gamesList.length
+  const id = crypto.randomUUID()
+
   gamesList.push({
-    id: `${nextId}`,
+    id,
     board: [
-      [null, null, null], 
-      [null, null, null], 
-      [null, null, null]
+      ["", "", ""], 
+      ["", "", ""], 
+      ["", "", ""]
     ],
     currentPlayer: "X",
     winner: null,
@@ -47,5 +83,6 @@ app.get("/games", (_, res) => {
   res.json(gamesList)
 })
 
+main()
 ViteExpress.listen(app, 3000, () => console.log("Server is listening..."))
 
