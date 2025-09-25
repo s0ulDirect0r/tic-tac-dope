@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import type { GameState } from "../../tictacdope";
+import { socket } from "../socket";
+import { useEffect } from "react";
 
 interface GameProps {
   id: string;
@@ -15,19 +17,33 @@ interface moveData {
 
 
 function Game(props: GameProps) {
-  const queryClient = useQueryClient()
-
-  const query = useQuery({
-    queryKey: ["gameState"],
-    queryFn: () => axios.get(`/game/${props.id}`).then((res) => res.data)
-  })
-
   const moveMutation = useMutation({
     mutationFn: (moveData: moveData) => axios.post(`/move/${props.id}`, moveData).then((res) => {
       console.log("mutation response: ", res)
       return res.data
     }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
+  })
+
+  const getEmittedGameStateMutation = useMutation({
+    mutationFn: () => axios.get(`/game/${props.id}`).then((res) => res.data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
+  })
+
+  const queryClient = useQueryClient()
+  useEffect(() => {
+    socket.on('move', () => {
+      return getEmittedGameStateMutation.mutate()
+    })
+
+    return () => {
+      socket.off('move')
+    }
+  }, [getEmittedGameStateMutation])
+
+  const query = useQuery({
+    queryKey: ["gameState"],
+    queryFn: () => axios.get(`/game/${props.id}`).then((res) => res.data)
   })
 
   if (query.isLoading) return <div>Loading...</div>
@@ -46,6 +62,9 @@ function Game(props: GameProps) {
       column
     }
     console.log('mutating!')
+    // so, this should update the front end with the new move
+    socket.emit('move', "MOVE MADE")
+
     return moveMutation.mutate(moveData)
   }
 
