@@ -21,8 +21,7 @@ function Game(props: GameProps) {
     mutationFn: (moveData: moveData) => axios.post(`/move/${props.id}`, moveData).then((res) => {
       console.log("mutation response: ", res)
       return res.data
-    }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
+    })
   })
 
   const getEmittedGameStateMutation = useMutation({
@@ -41,6 +40,7 @@ function Game(props: GameProps) {
     }
   }, [getEmittedGameStateMutation])
 
+  // why is this being called multiple times?
   const query = useQuery({
     queryKey: ["gameState"],
     queryFn: () => axios.get(`/game/${props.id}`).then((res) => res.data)
@@ -61,9 +61,6 @@ function Game(props: GameProps) {
       row,
       column
     }
-    console.log('mutating!')
-    // so, this should update the front end with the new move
-    socket.emit('move', "MOVE MADE")
 
     return moveMutation.mutate(moveData)
   }
