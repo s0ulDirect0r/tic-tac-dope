@@ -14,18 +14,19 @@ import cors from 'cors'
 dotenv.config()
 const app = express()
 app.use(express.json())
-// app.use(express.static('dist'))
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('dist'))
+}
 app.use(cors())
 // app.use(morgan('combined'))
 const server = createServer(app)
 
 console.log(process.env.NODE_ENV)
+const originUrl = process.env.NODE_ENV === 'production' ? '' : "http://localhost:3000"
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production'
-      ? "https://tic-tac-dope-client.fly.dev/"
-      : "http://localhost:3000"
+    origin: originUrl
   }
 })
 
@@ -66,6 +67,7 @@ app.post("/move/:id", async (req, res) => {
   .where(eq(gamesTable.id, req.params.id))
   .returning()
   io.emit('move', updatedGame[0])
+  console.log('move emitted!')
   res.json(updatedGame[0])
 })
 
@@ -99,5 +101,10 @@ app.get("/games", async (_, res) => {
   } 
 })
 
-ViteExpress.bind(app, server)
-server.listen(3000, () => console.log("Server is listening..."))
+if (process.env.NODE_ENV === "development") {
+  io.listen(4000)
+  ViteExpress.listen(app, 3000, () => console.log("Server is listening..."))
+} else {
+  ViteExpress.bind(app, server)
+  server.listen(3000, () => console.log('server is listening'))
+}
