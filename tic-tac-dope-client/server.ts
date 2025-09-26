@@ -8,23 +8,36 @@ import { gamesTable } from "./db/schema"
 import { eq } from "drizzle-orm"
 import { Server } from 'socket.io'
 import { createServer } from "node:http"
+import cors from 'cors'
 // import morgan from 'morgan'
 
 dotenv.config()
 const app = express()
 app.use(express.json())
+app.use(express.static('dist'))
+app.use(cors())
 // app.use(morgan('combined'))
 const server = createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: process.env.NODE_ENV === 'production'
+      ? "https://tic-tac-dope-client.fly.dev/"
+      : "http://localhost:3000"
   }
 })
 
 const connectionString = process.env.DATABASE_URL!
+let client;
+try {
+  client = postgres(connectionString, { prepare: false }) 
+} catch (error) {
+  console.log(error)
+  process.exit(1)
+}
 
-export const client = postgres(connectionString, { prepare: false })
+console.log('client: ', client)
 const db = drizzle(client)
+console.log('db: ', db)
 
 app.use(express.json())
 
@@ -77,9 +90,13 @@ app.post("/create", async (req, res) => {
 })
 
 app.get("/games", async (_, res) => {
-  const games = await db.select().from(gamesTable)
-  res.json(games)
+  try {
+    const games = await db.select().from(gamesTable)
+    res.json(games)
+  } catch (error) {
+    console.log(error as Error)
+  } 
 })
 
-io.listen(4000)
-ViteExpress.listen(app, 3000, () => console.log("Server is listening..."))
+ViteExpress.bind(app, server)
+server.listen(3000, () => console.log("Server is listening..."))
