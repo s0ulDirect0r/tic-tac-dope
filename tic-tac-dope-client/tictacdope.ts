@@ -3,7 +3,8 @@ export type Player = "X" | "O"
 export type Cell = Player | ""
 
 export interface GameState {
-  id: string;
+  id: string,
+  roomNumber: number,
   board: Cell[][],
   currentPlayer: Player,
   winner: Player | null,
@@ -56,6 +57,7 @@ const isStalemate = (gameState: GameState) => {
 export const makeMove = (gameState: GameState, row: number, column: number): GameState => {
   const gameStateCopy = {
     id: gameState.id,
+    roomNumber: gameState.roomNumber,
     board: gameState.board,
     currentPlayer: gameState.currentPlayer,
     winner: gameState.winner,

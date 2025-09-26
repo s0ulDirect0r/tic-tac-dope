@@ -14,10 +14,13 @@ import cors from 'cors'
 dotenv.config()
 const app = express()
 app.use(express.json())
-app.use(express.static('dist'))
+// app.use(express.static('dist'))
 app.use(cors())
 // app.use(morgan('combined'))
 const server = createServer(app)
+
+console.log(process.env.NODE_ENV)
+
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production'
@@ -35,9 +38,7 @@ try {
   process.exit(1)
 }
 
-console.log('client: ', client)
 const db = drizzle(client)
-console.log('db: ', db)
 
 app.use(express.json())
 
@@ -72,6 +73,7 @@ app.post("/create", async (req, res) => {
   try {
    const returnedGames = await db.insert(gamesTable).values({
     id: crypto.randomUUID(),
+    roomNumber: Math.floor(Math.random() * 9999),
     board: [
       ["", "", ""], 
       ["", "", ""], 
@@ -82,7 +84,6 @@ app.post("/create", async (req, res) => {
     stalemate: false
     }).returning()
    const returnedGame = returnedGames[0]
-    console.log(returnedGames)
     res.json(returnedGame)
   } catch (error) {
     console.log(error as Error)
