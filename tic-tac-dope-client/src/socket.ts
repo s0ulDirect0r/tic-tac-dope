@@ -1,5 +1,10 @@
-import { io } from 'socket.io-client'
+import type { DefaultEventsMap } from '@socket.io/component-emitter';
+import { io, Socket } from 'socket.io-client'
 
-const URL = process.env.NODE_ENV === 'production' ? 'https://tic-tac-dope-client.fly.dev/' : 'http://localhost:3000'
+export let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
-export const socket = io(URL)
+if (process.env.NODE_ENV === 'development') {
+  socket = io("http://localhost:4000")
+} else {
+  socket = io()
+}

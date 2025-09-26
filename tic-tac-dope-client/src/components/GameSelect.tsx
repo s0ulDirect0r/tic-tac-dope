@@ -41,7 +41,7 @@ const GameSelect = (props: GameSelectProps) => {
       </div>
       {gamesList.map(game => {
           if(game.winner || game.stalemate) { return }
-          return <button key={game.id} className="max-w-2xl size-40 p-4 rounded-lg text-2xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.id}</button>
+          return <button key={game.id} className="max-w-2xl size-40 p-4 rounded-lg text-2xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.roomNumber}</button>
       })}
     </div>
   )

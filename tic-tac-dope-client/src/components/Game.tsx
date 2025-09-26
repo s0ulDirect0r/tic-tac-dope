@@ -27,14 +27,14 @@ function Game(props: GameProps) {
   const queryClient = useQueryClient()
   useEffect(() => {
     socket.on('move', (gameState) => {
-
+      console.log('move received')
       return queryClient.setQueryData(['gameState'], gameState)
     })
 
     return () => {
       socket.off('move')
     }
-  })
+  }, [queryClient, props.id])
 
   // why is this being called multiple times?
   const query = useQuery({

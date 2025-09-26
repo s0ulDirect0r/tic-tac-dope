@@ -1,4 +1,4 @@
-import { pgTable, varchar, text, boolean, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, text, boolean, uuid, integer } from 'drizzle-orm/pg-core'
 
 // // export interface GameState {
 //   id: string;
@@ -10,6 +10,7 @@ import { pgTable, varchar, text, boolean, uuid } from 'drizzle-orm/pg-core'
 
 export const gamesTable = pgTable("games", {
   id: uuid().primaryKey(),
+  roomNumber: integer(),
   board: text('board').array().array().notNull().default([[], [], []]),
   currentPlayer: varchar({ length: 255 }).notNull(),
   winner: varchar({ length: 255 }),
