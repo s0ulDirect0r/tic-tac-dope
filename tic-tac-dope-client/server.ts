@@ -8,12 +8,12 @@ import { gamesTable } from "./db/schema"
 import { eq } from "drizzle-orm"
 import { Server } from 'socket.io'
 import { createServer } from "node:http"
-import morgan from 'morgan'
+// import morgan from 'morgan'
 
 dotenv.config()
 const app = express()
 app.use(express.json())
-app.use(morgan('combined'))
+// app.use(morgan('combined'))
 const server = createServer(app)
 const io = new Server(server, {
   cors: {
@@ -50,6 +50,7 @@ app.post("/move/:id", async (req, res) => {
     stalemate: movedGame.stalemate
   })
   .where(eq(gamesTable.id, req.params.id))
+  .returning()
   io.emit('move', updatedGame[0])
   res.json(updatedGame[0])
 })

@@ -24,21 +24,17 @@ function Game(props: GameProps) {
     })
   })
 
-  const getEmittedGameStateMutation = useMutation({
-    mutationFn: () => axios.get(`/game/${props.id}`).then((res) => res.data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['gameState']})
-  })
-
   const queryClient = useQueryClient()
   useEffect(() => {
-    socket.on('move', () => {
-      return getEmittedGameStateMutation.mutate()
+    socket.on('move', (gameState) => {
+
+      return queryClient.setQueryData(['gameState'], gameState)
     })
 
     return () => {
       socket.off('move')
     }
-  }, [getEmittedGameStateMutation])
+  })
 
   // why is this being called multiple times?
   const query = useQuery({
