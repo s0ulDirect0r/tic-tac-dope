@@ -35,14 +35,14 @@ const GameSelect = (props: GameSelectProps) => {
   const gamesList: GameState[] = query.data
 
   return (
-    <div className="flex flex-col flex-wrap m-8 justify-center items-center gap-4">
-      <div>
-        <button onClick={handleCreateGameClick} className="p-4 rounded-lg bg-green-500 text-white text-2xl border-green-500">Create Game</button>
+    <div className="flex flex-col flex-wrap m-8 justify-center items-center gap-4 pb-6">
+      <div className="mb-14">
+        <button onClick={handleCreateGameClick} className="shadow-lg shadow-green-500 p-4 rounded-lg bg-green-500 text-white text-2xl border-green-500">Create Game</button>
       </div>
-      <div className="content-center grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[70vh] overflow-y-auto pr-1">
+      <div className="pt-2 content-center grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[70vh] pr-1">
         {gamesList.map(game => {
           if(game.winner || game.stalemate) { return }
-          return <button key={game.id} className="w-full p-4 sm:p-5 aspect-square rounded-lg text-lg sm:text-xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.roomNumber}</button>
+          return <button key={game.id} className="shadow-lg shadow-green-500 w-full p-4 sm:p-5 aspect-square rounded-lg text-lg sm:text-xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.roomNumber}</button>
        })}
       </div>
     </div>
