@@ -1,4 +1,4 @@
-import { pgTable, varchar, text, boolean, uuid, integer } from 'drizzle-orm/pg-core'
+import { pgTable, varchar, text, boolean, uuid, integer, timestamp } from 'drizzle-orm/pg-core'
 
 // // export interface GameState {
 //   id: string;
@@ -14,5 +14,7 @@ export const gamesTable = pgTable("games", {
   board: text('board').array().array().notNull().default([[], [], []]),
   currentPlayer: varchar({ length: 255 }).notNull(),
   winner: varchar({ length: 255 }),
-  stalemate: boolean()
+  stalemate: boolean(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date())
 })

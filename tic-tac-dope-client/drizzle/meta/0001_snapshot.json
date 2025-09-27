@@ -1,0 +1,83 @@
+{
+  "id": "78fc6a53-cd2c-4c17-bc24-5ffa8fa11a92",
+  "prevId": "a566cc25-da9e-4ca5-863c-46d2485078b6",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "roomNumber": {
+          "name": "roomNumber",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "board": {
+          "name": "board",
+          "type": "text[][]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{{},{},{}}'"
+        },
+        "currentPlayer": {
+          "name": "currentPlayer",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "winner": {
+          "name": "winner",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stalemate": {
+          "name": "stalemate",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
