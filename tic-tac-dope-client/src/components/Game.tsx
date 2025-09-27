@@ -26,19 +26,24 @@ function Game(props: GameProps) {
 
   const queryClient = useQueryClient()
   useEffect(() => {
+    socket.emit('join-game', props.id)
+
     socket.on('move', (gameState) => {
       console.log('move received')
-      return queryClient.setQueryData(['gameState'], gameState)
+      // this is a terrible hack, have to find a way to make sure emit sockets are opened
+      // and attached to a specific game
+        return queryClient.setQueryData(['gameState', props.id], gameState)
     })
 
     return () => {
+      socket.emit('leave-game', props.id)
       socket.off('move')
     }
   }, [queryClient, props.id])
 
   // why is this being called multiple times?
   const query = useQuery({
-    queryKey: ["gameState"],
+    queryKey: ["gameState", props.id],
     queryFn: () => axios.get(`/game/${props.id}`).then((res) => res.data)
   })
 
