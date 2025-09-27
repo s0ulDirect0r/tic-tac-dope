@@ -83,8 +83,8 @@ function Game(props: GameProps) {
   }
 
   const Cell = (props: CellProps) => (
-    <div onClick={props.onClick} className="bg-green-500 flex flex-col size-24 md:size-40 justify-center items-center rounded-md aspect-square p-2 sm:p-8 text-7xl sm:text-9xl text-white font-bold">
-      <p>{props.children}</p>
+    <div onClick={props.onClick} className="shadow-lg/50 shadow-green-300 bg-green-500 flex flex-col size-24 md:size-40 justify-center items-center rounded-md aspect-square p-2 sm:p-8 text-7xl sm:text-9xl text-white font-bold">
+      <p className="text-shadow-md text-shadow-white">{props.children}</p>
     </div>
   )
 
