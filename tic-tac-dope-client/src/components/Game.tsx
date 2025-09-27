@@ -27,7 +27,6 @@ function Game(props: GameProps) {
   const queryClient = useQueryClient()
   useEffect(() => {
     socket.emit('join-game', props.id)
-
     socket.on('move', (gameState) => {
       console.log('move received')
       // this is a terrible hack, have to find a way to make sure emit sockets are opened

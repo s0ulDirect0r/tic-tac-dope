@@ -39,10 +39,12 @@ const GameSelect = (props: GameSelectProps) => {
       <div>
         <button onClick={handleCreateGameClick} className="size-40 p-4 rounded-lg bg-green-500 text-white text-2xl border-green-500">Create Game</button>
       </div>
-      {gamesList.map(game => {
+      <div className="content-center grid grid-cols-3 grid-rows-3 gap-3 max-w-sm sm:max-w-3xl">
+        {gamesList.map(game => {
           if(game.winner || game.stalemate) { return }
           return <button key={game.id} className="max-w-2xl size-40 p-4 rounded-lg text-2xl bg-green-400 border-green-400 text-white" onClick={() => props.onClick(game.id)}>Game {game.roomNumber}</button>
       })}
+      </div>
     </div>
   )
 }
