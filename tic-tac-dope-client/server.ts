@@ -51,8 +51,13 @@ app.get("/game/:id", async (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected')
-  socket.on('move', (message) => {
-    console.log('move: ', message)
+  socket.on('join-game', (gameId) => {
+    console.log(`game ${gameId} was joined`)
+    socket.join(gameId)
+  })
+  socket.on('leave-game', (gameId) => {
+    console.log(`game ${gameId} was left`)
+    socket.leave(gameId)
   })
 })
 
@@ -66,7 +71,9 @@ app.post("/move/:id", async (req, res) => {
   })
   .where(eq(gamesTable.id, req.params.id))
   .returning()
-  io.emit('move', updatedGame[0])
+  io.to(req.params.id).emit('move', updatedGame[0], () => {
+    console.log(`move emitted to ${req.params.id}`)
+  })
   console.log('move emitted!')
   res.json(updatedGame[0])
 })
