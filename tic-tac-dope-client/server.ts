@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from 'postgres'
 import { makeMove } from './tictacdope'
 import { gamesTable } from "./db/schema"
-import { eq } from "drizzle-orm"
+import { eq, asc } from "drizzle-orm"
 import { Server } from 'socket.io'
 import { createServer } from "node:http"
 import cors from 'cors'
@@ -49,6 +49,7 @@ app.get("/game/:id", async (req, res) => {
   res.json(retrievedGame[0])
 })
 
+//
 io.on('connection', (socket) => {
   console.log('a user connected')
   socket.on('join-game', (gameId) => {
@@ -101,7 +102,7 @@ app.post("/create", async (req, res) => {
 
 app.get("/games", async (_, res) => {
   try {
-    const games = await db.select().from(gamesTable)
+    const games = await db.select().from(gamesTable).orderBy(asc(gamesTable.createdAt))
     res.json(games)
   } catch (error) {
     console.log(error as Error)
